@@ -12,6 +12,14 @@ import requests
 import msgpack
 from boptest.lib.testcase import TestCase
 
+def time_it(func):
+    def wrapper(*args):
+        before_function_time = datetime.now()
+        response = func(*args)
+        if response.status == 200:
+            response['runtime'] = (datetime.now() - before_function_time).total_seconds()
+        return response
+    return wrapper
 
 class Job:
     def __init__(self, parameters):
@@ -203,6 +211,7 @@ class Job:
         step = params['step']
         return self.package_response(self.tc.set_step(step))
 
+    @time_it
     def advance(self, params):
         u = params['u']
         return self.package_response(self.tc.advance(u))
