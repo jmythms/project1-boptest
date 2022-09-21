@@ -16,7 +16,7 @@ def time_it(func):
     def wrapper(*args):
         before_function_time = datetime.now()
         response = func(*args)
-        if response.status == 200:
+        if response['status'] == 200:
             response['runtime'] = (datetime.now() - before_function_time).total_seconds()
         return response
     return wrapper
